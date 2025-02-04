@@ -21,12 +21,13 @@ menu = r"""
 │     3. Create Expense                                 │
 │     4. Save to File                                   │
 │     5. Load from File                                 │
-│     6. Set/Change Budget                              │
+│     6. Change Budget                                  │
 │     7. Exit                                           │
 └───────────────────────────────────────────────────────┘
 """
 def main():
     print(wordArt)
+    Expense.set_budget()
 
     while True:
         choice = ""
