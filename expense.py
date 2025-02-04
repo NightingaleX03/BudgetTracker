@@ -16,6 +16,16 @@ class Expense:
         # if date is not provided, set it to current date
         self.date = date if date else datetime.now().strftime("%Y-%m-%d")
 
+    @property
+    def dict(self):
+        # Convert the expense object to a dictionary
+        return {
+            "description": self.description,
+            "amount": self.amount,
+            "category": self.category,
+            "date": self.date
+        }
+
     # method to add expense
     @staticmethod
     def add_expense():
@@ -93,18 +103,19 @@ class Expense:
     # method to save expenses to file
     @staticmethod
     def save_expense_file():
-
-        # load existing expenses from file
         try:
             with open("expenseList.json", "r") as file:
                 exist_expenses = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
             exist_expenses = []
 
-        # add new expenses to existing expenses
-        with open("expenseList.json", "w") as file:
-            all_expenses = exist_expenses + Expense.expenses
-            json.dump([expense.__dict__ for expense in all_expenses], file)
+        new_expenses = [expense.dict for expense in Expense.expenses if expense.dict not in exist_expenses]
+        if new_expenses:
+            with open("expenseList.json", "w") as file:
+                json.dump(exist_expenses + new_expenses, file)
+                print("Expenses saved successfully.")
+        else:
+            print("No new expenses to save.")
 
     # method to load expenses from file
     @staticmethod
