@@ -21,7 +21,8 @@ menu = r"""
 │     3. Create Expense                                 │
 │     4. Save to File                                   │
 │     5. Load from File                                 │
-│     6. Exit                                           │
+│     6. Set/Change Budget                              │
+│     7. Exit                                           │
 └───────────────────────────────────────────────────────┘
 """
 def main():
@@ -45,11 +46,11 @@ def main():
             filterChoice = ""
 
             #filter by keyword or date range
-            choices = ['k', 'd']
+            choices = ['k', 'd', 'c']
             validChoice = False
             while not validChoice:
                 #print filter menu
-                print("Please select a filter type:\n\t(k) By Keyword\n\t(d) By Date Range\n")
+                print("Please select a filter type:\n\t(k) By Keyword\n\t(d) By Date Range\n\t(c) by Category\n")
                 filterChoice = input("Enter choice: ")
                 if filterChoice in choices:
                     validChoice = True
@@ -60,6 +61,7 @@ def main():
         #create expense
         elif (choice == 3):
             Expense.add_expense()
+            Expense.check_budget();
             print("Expense added successfully\n")
 
         #save to file
@@ -71,8 +73,13 @@ def main():
         elif (choice == 5):
             Expense.load_expense_file()
             print("Expenses loaded from file\n")
-        
+
+        #set budget
         elif (choice == 6):
+            Expense.set_budget();
+        
+        #exit
+        elif (choice == 7):
             print("Thank you for using Expense Tracker, Till next time! <3")
             break
         
