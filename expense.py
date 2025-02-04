@@ -48,8 +48,6 @@ class Expense:
     # method to view expenses
     @staticmethod
     def view_expenses():
-        # load expenses from file
-        Expense.load_expense_file()
 
         if not Expense.expenses:
             print("No expenses available")
@@ -105,8 +103,8 @@ class Expense:
 
         # add new expenses to existing expenses
         with open("expenseList.json", "w") as file:
-            all_expenses = exist_expenses + [expense.__dict__ for expense in Expense.expenses]
-            json.dump(all_expenses, file, indent=4)
+            all_expenses = exist_expenses + Expense.expenses
+            json.dump([expense.__dict__ for expense in all_expenses], file)
 
     # method to load expenses from file
     @staticmethod
