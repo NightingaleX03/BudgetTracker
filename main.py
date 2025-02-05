@@ -1,5 +1,8 @@
 from expense import Expense
-wordArt = r""" 
+from budget import Budget
+from file import File
+
+word_art = r"""
  ________                                                                    ________                                __                           
 /        |                                                                  /        |                              /  |                          
 $$$$$$$$/  __    __   ______    ______   _______    _______   ______        $$$$$$$$/   ______    ______    _______ $$ |   __   ______    ______  
@@ -11,7 +14,8 @@ $$       |/$$/ $$  |$$    $$/ $$       |$$ |  $$ |/     $$/ $$       |         $
 $$$$$$$$/ $$/   $$/ $$$$$$$/   $$$$$$$/ $$/   $$/ $$$$$$$/   $$$$$$$/          $$/    $$/        $$$$$$$/  $$$$$$$/ $$/   $$/  $$$$$$$/ $$/       
                     $$ |                                                                                                                          
                     $$ |                                                                                                                          
-                    $$/                                                                                                                           """
+                    $$/                                                                                                                          
+"""
 
 menu = r"""
 ┌───────────────────────────────────────────────────────┐
@@ -25,68 +29,65 @@ menu = r"""
 │     7. Exit                                           │
 └───────────────────────────────────────────────────────┘
 """
+
 def main():
-    print(wordArt)
-    Expense.set_budget()
+    print(word_art)
+    # user sets budget
+    Budget.set_budget()
 
     while True:
-        choice = ""
-        while choice.isdigit() == False and choice not in ["1","2","3","4","5","6"]:
-            #print menu
-            print(menu)
-            choice = input("Enter choice: ")
+        choice = input(menu + "\nEnter choice: ")
+        if not choice.isdigit() or int(choice) not in range(1, 8):
+            print("Invalid choice, please try again.\n")
+            continue
 
         choice = int(choice)
 
         #view expenses
-        if (choice == 1):
-            Expense.view_expenses()
-
+        if choice == 1:
+            Expense.view_expenses(Budget.check_budget)
+        
         #filter expenses
-        elif (choice == 2):
-            filterChoice = ""
+        elif choice == 2:
 
             #filter by keyword or date range
-            choices = ['k', 'd', 'c']
-            validChoice = False
-            while not validChoice:
-                #print filter menu
-                print("Please select a filter type:\n\t(k) By Keyword\n\t(d) By Date Range\n\t(c) by Category\n")
-                filterChoice = input("Enter choice: ")
-                if filterChoice in choices:
-                    validChoice = True
-            #filter expenses function
-            Expense.filter_expense(filterChoice);
-            print("\n")
-        
+            #print filter menu
+            filter_choice = input("Select filter type:\n(k) By Keyword\n(d) By Date Range\n(c) By Category\nEnter choice: ").lower()
+            if filter_choice in ['k', 'd', 'c']:
+                #filter expenses function
+                Expense.filter_expense(filter_choice, File.load_expense_file)
+            else:
+                print("Invalid filter choice.\n")
+
         #create expense
-        elif (choice == 3):
+        elif choice == 3:
             Expense.add_expense()
-            Expense.check_budget();
-            print("Expense added successfully\n")
+            Budget.check_budget(Expense.expenses)
+            print("Expense added successfully!\n")
 
-        #save to file
-        elif (choice == 4):
-            Expense.save_expense_file()
-            print("Expenses saved to file\n")
+        #save expenses to file
+        elif choice == 4:
+            File.save_expense_file()
+            print("Expenses saved to file.\n")
 
-        #load from file
-        elif (choice == 5):
-            Expense.load_expense_file()
-            print("Expenses loaded from file\n")
+        #load expenses from file
+        elif choice == 5:
+            File.load_expense_file()
+            print("Expenses loaded from file.\n")
 
         #set budget
-        elif (choice == 6):
-            Expense.set_budget();
-        
-        #exit
-        elif (choice == 7):
-            print("Thank you for using Expense Tracker, Till next time! <3")
+        elif choice == 6:
+            Budget.set_budget()
+
+        #exit bye bye <3
+        elif choice == 7:
+            print("Thank you for using Expense Tracker! Till next time! ❤️")
             break
-        
-        #invalid choice
+
+        #invalid choice oh no!
         else:
-            print("Invalid choice\n")
+            print("Invalid choice, please try again.\n")
+
 
 if __name__ == "__main__":
     main()
